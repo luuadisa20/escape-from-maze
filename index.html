@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#2563eb">
+  <title>Escape from the Maze — Answer vs Hacker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="min-h-screen">
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <main id="loginScreen" class="min-h-screen flex items-center justify-center p-4">
+    <section class="login-card w-full max-w-5xl grid md:grid-cols-2 overflow-hidden">
+      <div class="login-art p-8 md:p-12 flex flex-col justify-between text-white">
+        <div>
+          <div class="brand-mark">迷</div>
+          <p class="uppercase tracking-[.25em] text-blue-100 text-xs font-extrabold mt-8">Game edukasi kelas 7</p>
+          <h1 class="text-4xl md:text-5xl font-black leading-tight mt-3">Escape from<br><span class="text-cyan-200">the Maze</span></h1>
+          <p class="text-blue-100 mt-4 text-lg">Answer vs Hacker</p>
+        </div>
+        <div class="maze-illustration" aria-hidden="true">
+          <div class="maze-lines"></div><div class="maze-player">🧑‍🚀</div><div class="maze-hacker">👾</div>
+        </div>
+        <p class="text-sm text-blue-100">Jawab pertanyaan, hindari jebakan, dan temukan jalan keluar!</p>
+      </div>
+      <div class="p-8 md:p-12 bg-white flex flex-col justify-center">
+        <span class="eyebrow">Selamat datang, penjelajah!</span>
+        <h2 class="text-3xl font-black text-slate-800 mt-2">Siap bermain?</h2>
+        <p class="text-slate-500 mt-2 mb-8">Masukkan identitasmu untuk memulai petualangan.</p>
+        <form id="loginForm" class="space-y-5">
+          <label class="field-label">Nama lengkap
+            <input id="studentName" class="field-input" type="text" maxlength="40" placeholder="Contoh: Alya Putri" required>
+          </label>
+          <label class="field-label">Kelas
+            <select id="studentClass" class="field-input" required>
+              <option value="">Pilih kelas</option><option>7A</option><option>7B</option><option>7C</option><option>7D</option><option>7E</option><option>7F</option>
+            </select>
+          </label>
+          <button class="btn-primary w-full" type="submit">Mulai Petualangan <span>→</span></button>
+        </form>
+        <p class="text-xs text-slate-400 mt-6">Data disimpan secara lokal pada perangkat ini.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="appScreen" class="hidden min-h-screen">
+    <header class="topbar">
+      <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <button class="flex items-center gap-3" id="brandHome" aria-label="Kembali ke dashboard">
+          <span class="brand-small">迷</span><span class="text-left"><b class="block text-slate-800 leading-tight">Escape from the Maze</b><small class="text-slate-500">Answer vs Hacker</small></span>
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="soundToggle" class="icon-btn" title="Aktif/nonaktifkan suara">🔊</button>
+          <button id="logoutBtn" class="btn-outline small">Keluar</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-7">
+      <nav class="nav-tabs mb-7" aria-label="Navigasi utama">
+        <button class="nav-tab active" data-page="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-tab" data-page="game">✦ <span>Permainan</span></button>
+        <button class="nav-tab" data-page="history">▤ <span>Riwayat</span></button>
+        <button class="nav-tab" data-page="guide">ⓘ <span>Petunjuk</span></button>
+      </nav>
+
+      <section id="dashboardPage" class="page">
+        <div class="hero-panel p-7 md:p-10 mb-6">
+          <div class="relative z-10 max-w-2xl">
+            <span class="hero-chip">🚀 Misi dimulai</span>
+            <h2 class="text-3xl md:text-4xl font-black text-white mt-4">Halo, <span id="welcomeName">Penjelajah</span>!</h2>
+            <p class="text-blue-100 mt-3 text-lg">Ada jalan keluar di ujung labirin. Pecahkan tantangannya dan kalahkan hacker!</p>
+            <button id="startGameBtn" class="btn-white mt-6">Mulai Permainan <span>→</span></button>
+          </div>
+          <div class="hero-orb" aria-hidden="true">🧩</div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
+          <div class="stat-card"><span class="stat-icon blue">⭐</span><p>Total skor</p><strong id="statScore">0</strong></div>
+          <div class="stat-card"><span class="stat-icon cyan">🏁</span><p>Permainan selesai</p><strong id="statGames">0</strong></div>
+          <div class="stat-card"><span class="stat-icon green">✓</span><p>Jawaban benar</p><strong id="statCorrect">0</strong></div>
+          <div class="stat-card"><span class="stat-icon orange">🎯</span><p>Akurasi rata-rata</p><strong id="statAccuracy">0%</strong></div>
+        </div>
+        <div class="grid lg:grid-cols-3 gap-5">
+          <div class="content-card lg:col-span-2 p-6">
+            <div class="flex items-center justify-between mb-4"><div><span class="eyebrow">Tantanganmu</span><h3 class="section-title">Pilih tingkat kesulitan</h3></div><span class="text-2xl">🗺️</span></div>
+            <div class="grid sm:grid-cols-3 gap-3">
+              <button class="level-card" data-level="easy"><span class="level-emoji">🌱</span><b>Mudah</b><small>5 pertanyaan · 3 kesempatan</small></button>
+              <button class="level-card" data-level="medium"><span class="level-emoji">⚡</span><b>Sedang</b><small>7 pertanyaan · 3 kesempatan</small></button>
+              <button class="level-card" data-level="hard"><span class="level-emoji">🔥</span><b>Sulit</b><small>9 pertanyaan · 2 kesempatan</small></button>
+            </div>
+          </div>
+          <div class="content-card p-6">
+            <span class="eyebrow">Peringatan misi</span><h3 class="section-title">Waspada hacker!</h3>
+            <p class="text-slate-500 text-sm leading-6 mt-3">Setiap pintu terkunci dijaga hacker. Jawab pertanyaan dengan tepat untuk membuka jalan. Kamu bisa mengulang jawaban yang salah, tetapi kesempatanmu terbatas.</p>
+            <div class="tip-banner mt-4">💡 Baca pertanyaan dengan teliti sebelum memilih jawaban.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="gamePage" class="page hidden">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <div><span class="eyebrow">Mode petualangan</span><h2 class="section-title text-2xl">Labirin Hacker</h2></div>
+          <div class="flex gap-2"><span class="pill" id="levelPill">Mudah</span><span class="pill">Pemain: <b id="gamePlayer">-</b></span></div>
+        </div>
+        <div class="grid lg:grid-cols-[1fr_300px] gap-5">
+          <div class="content-card p-4 md:p-6">
+            <div class="flex flex-wrap justify-between gap-3 mb-4">
+              <div class="flex gap-4"><div><small class="muted-label">SKOR</small><b class="block text-xl" id="gameScore">0</b></div><div><small class="muted-label">KESEMPATAN</small><b class="block text-xl" id="lives">❤️❤️❤️</b></div></div>
+              <div class="text-right"><small class="muted-label">PROGRES</small><b class="block text-xl" id="progressText">0/5</b></div>
+            </div>
+            <div class="progress-track mb-5"><div id="progressBar" class="progress-fill"></div></div>
+            <div id="maze" class="maze-grid" role="grid" aria-label="Labirin permainan"></div>
+            <div class="controls mt-5">
+              <div class="text-center text-xs text-slate-400 mb-2">Gunakan tombol arah / WASD</div>
+              <div class="grid grid-cols-3 gap-2 max-w-[190px] mx-auto">
+                <span></span><button class="move-btn" data-move="up">↑</button><span></span>
+                <button class="move-btn" data-move="left">←</button><button class="move-btn" data-move="down">↓</button><button class="move-btn" data-move="right">→</button>
+              </div>
+            </div>
+          </div>
+          <aside class="space-y-5">
+            <div class="content-card p-5"><span class="eyebrow">Misi aktif</span><h3 class="font-extrabold text-slate-800 mt-1">Temukan pintu keluar</h3><p class="text-sm text-slate-500 mt-2">Kumpulkan kunci dengan menjawab pertanyaan saat bertemu penjaga.</p><div class="mt-4 flex items-center gap-3"><span class="text-3xl">🧑‍🚀</span><div><b class="text-sm">Karakter kamu</b><small class="block text-slate-400">Penjelajah labirin</small></div></div><div class="flex items-center gap-3 mt-3"><span class="text-3xl">👾</span><div><b class="text-sm">Hacker</b><small class="block text-slate-400">Penjaga pintu</small></div></div></div>
+            <div class="content-card p-5"><span class="eyebrow">Petunjuk</span><p class="text-sm text-slate-500 leading-6 mt-2">🟦 Dinding<br>⬜ Jalur aman<br>🧑‍🚀 Posisi kamu<br>👾 Tantangan hacker<br>🏁 Garis akhir</p></div>
+            <button id="quitGameBtn" class="btn-outline w-full">Akhiri permainan</button>
+          </aside>
+        </div>
+      </section>
+
+      <section id="historyPage" class="page hidden">
+        <div class="flex flex-wrap justify-between items-end gap-3 mb-5"><div><span class="eyebrow">Catatan perjalanan</span><h2 class="section-title text-2xl">Riwayat Permainan</h2><p class="text-slate-500 text-sm mt-1">Hasil permainan tersimpan pada perangkat ini.</p></div><button id="exportBtn" class="btn-outline">↓ Ekspor CSV</button></div>
+        <div class="content-card p-4 md:p-6">
+          <div class="grid md:grid-cols-[1fr_180px_180px] gap-3 mb-4">
+            <input id="searchHistory" class="field-input" placeholder="Cari nama siswa...">
+            <select id="filterClass" class="field-input"><option value="">Semua kelas</option><option>7A</option><option>7B</option><option>7C</option><option>7D</option><option>7E</option><option>7F</option></select>
+            <select id="filterStatus" class="field-input"><option value="">Semua status</option><option value="Menang">Menang</option><option value="Kalah">Kalah</option></select>
+          </div>
+          <div class="overflow-x-auto"><table class="results-table w-full"><thead><tr><th>No.</th><th>Nama siswa</th><th>Kelas</th><th>Tanggal</th><th>Level</th><th>Skor</th><th>Benar</th><th>Salah</th><th>Akurasi</th><th>Durasi</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+          <div id="emptyHistory" class="empty-state hidden"><span>📚</span><b>Belum ada riwayat permainan</b><p>Hasil permainanmu akan muncul di sini.</p></div>
+        </div>
+      </section>
+
+      <section id="guidePage" class="page hidden">
+        <span class="eyebrow">Panduan singkat</span><h2 class="section-title text-2xl mb-5">Cara bermain</h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          <article class="content-card p-6"><span class="guide-number">01</span><h3 class="font-extrabold text-lg mt-3">Pilih level</h3><p class="text-slate-500 text-sm mt-2">Pilih tingkat mudah, sedang, atau sulit pada dashboard.</p></article>
+          <article class="content-card p-6"><span class="guide-number">02</span><h3 class="font-extrabold text-lg mt-3">Jelajahi labirin</h3><p class="text-slate-500 text-sm mt-2">Gerakkan karakter dengan tombol panah, WASD, atau tombol navigasi di layar.</p></article>
+          <article class="content-card p-6"><span class="guide-number">03</span><h3 class="font-extrabold text-lg mt-3">Hadapi hacker</h3><p class="text-slate-500 text-sm mt-2">Saat bertemu 👾, jawab pertanyaan. Jawaban benar membuka akses dan memberi 10 poin.</p></article>
+          <article class="content-card p-6"><span class="guide-number">04</span><h3 class="font-extrabold text-lg mt-3">Capai garis akhir</h3><p class="text-slate-500 text-sm mt-2">Temukan jalan menuju 🏁 sebelum kesempatan habis. Hasilmu akan tersimpan otomatis.</p></article>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="questionModal" class="modal-backdrop hidden">
+    <div class="modal-card w-full max-w-xl">
+      <div class="flex items-start justify-between"><div><span class="eyebrow">Tantangan hacker</span><h3 class="text-2xl font-black mt-1">Buktikan kemampuanmu!</h3></div><span class="text-4xl">👾</span></div>
+      <div class="question-meta mt-5"><span id="questionCategory">Informatika</span><span id="questionCounter">Pertanyaan 1</span></div>
+      <p id="questionText" class="text-lg font-extrabold text-slate-800 leading-relaxed mt-4"></p>
+      <div id="answerOptions" class="grid gap-2 mt-5"></div>
+      <p id="answerFeedback" class="text-sm font-bold mt-3 min-h-5"></p>
+      <div class="flex justify-end mt-4"><button id="submitAnswer" class="btn-primary" disabled>Periksa jawaban</button></div>
+    </div>
+  </div>
+
+  <div id="resultModal" class="modal-backdrop hidden">
+    <div class="modal-card w-full max-w-lg text-center">
+      <div id="resultEmoji" class="text-6xl">🏆</div><span class="eyebrow mt-3 block">Misi selesai</span><h3 id="resultTitle" class="text-3xl font-black mt-2">Kamu berhasil!</h3><p id="resultMessage" class="text-slate-500 mt-2"></p>
+      <div class="grid grid-cols-3 gap-2 my-6"><div class="result-stat"><b id="resultScore">0</b><small>Skor</small></div><div class="result-stat"><b id="resultCorrect">0</b><small>Benar</small></div><div class="result-stat"><b id="resultAccuracy">0%</b><small>Akurasi</small></div></div>
+      <div class="flex flex-col sm:flex-row gap-2"><button id="saveResultBtn" class="btn-primary flex-1">Simpan hasil</button><button id="replayBtn" class="btn-outline flex-1">Main lagi</button><button id="resultHomeBtn" class="btn-outline flex-1">Dashboard</button></div>
+    </div>
+  </div>
+  <div id="detailModal" class="modal-backdrop hidden"><div class="modal-card max-w-lg w-full"><div class="flex justify-between"><h3 class="text-xl font-black">Detail hasil</h3><button class="icon-btn" id="closeDetail">✕</button></div><div id="detailContent" class="mt-4"></div></div></div>
+
+  <script src="js/questions.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
